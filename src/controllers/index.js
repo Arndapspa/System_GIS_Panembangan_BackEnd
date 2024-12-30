@@ -83,8 +83,20 @@ const register = async (req, res) => {
       });
       res.status(200).json({ uid: userRecord.uid, email: userRecord.email });
   } catch (error) {
-      console.error(' creating new useErrorr:', error);
-      res.status(400).json({ error: error.message });
+      console.error(' creating new useError:', error.code);
+      
+      let message = ''
+
+      if (error.code == 'auth/email-already-in-use' || error.code == 'auth/email-already-exists')
+          message = 'Email sudah terdaftar, silahkan masukkan email lain!'
+      else if (error.code == 'auth/invalid-email')
+          message = 'Email yang dimasukan tidak valid!'
+      else if (error.code == 'auth/weak-password')
+          message = 'Kombinasi password lemah!'
+      else
+          message = error.code
+
+      res.status(400).json({ error: message });
   }
 }
 
