@@ -59,16 +59,16 @@ const updatePassword = async (req, res) => {
   const { password } = req.body;
 
   if (!password || password.length < 8) {
-    return res.status(400).json({ message: 'Password harus minimal 8 karakter' });
+    return res.status(400).json({ status: false, message: 'Password harus minimal 8 karakter' });
   }
 
   try {
     // Update password user
     await admin.auth().updateUser(req.uid, { password: password });
 
-    res.status(200).json({ message: 'Password berhasil diperbarui' });
+    res.status(200).json({ status: true, message: 'Password berhasil diperbarui' });
   } catch (error) {
-    res.status(500).json({ message: 'Gagal memperbarui password', error: error.message });
+    res.status(500).json({ status: false, message: 'Gagal memperbarui password', error: error.message });
   }
 }
 
